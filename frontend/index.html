@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hexagon Number Shift</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hexagon-app" aria-labelledby="page-title">
+        <header class="intro">
+          <p class="eyebrow">Number arrangement</p>
+          <h1 id="page-title">Hexagon shift</h1>
+          <p class="instructions">Select a triangle, enter an integer from -100 to 100, and confirm. The selected triangle keeps your number while the two triangles on each side rotate around it. Values that meet are added.</p>
+        </header>
+        <div class="workspace">
+          <div class="hexagon" id="hexagon" aria-label="Interactive six-triangle hexagon"></div>
+          <aside class="legend" aria-label="Hexagon controls">
+            <div><span class="legend-mark legend-mark--selected"></span><span>Selected triangle</span></div>
+            <div><span class="legend-mark legend-mark--opposite"></span><span>Opposite triangle stays fixed</span></div>
+            <p id="status" class="status" role="status" aria-live="polite">Choose a triangle to begin.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

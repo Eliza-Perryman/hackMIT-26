@@ -1,0 +1,71 @@
+:root {
+  color: #24313a;
+  background: #dfe8e4;
+  font-family: Georgia, "Times New Roman", serif;
+  font-synthesis: none;
+  --ink: #24313a;
+  --muted: #5e6d6b;
+  --paper: #f5f1e8;
+  --line: #9caea6;
+  --accent: #d35f3f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #dfe8e4 0%, #c8d8d0 55%, #ead9c5 100%);
+}
+
+.shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 1rem;
+}
+
+.hexagon-app {
+  width: min(100%, 70rem);
+  padding: clamp(1.25rem, 4vw, 4rem);
+  border: 1px solid rgba(36, 49, 58, 0.22);
+  background: rgba(245, 241, 232, 0.88);
+  box-shadow: 0 1.5rem 4rem rgba(36, 49, 58, 0.12);
+}
+
+.intro { max-width: 42rem; }
+.eyebrow { margin: 0 0 0.75rem; color: var(--accent); font: 700 0.72rem/1.2 Arial, sans-serif; letter-spacing: 0.14em; text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(2.3rem, 7vw, 5.5rem); font-weight: normal; line-height: 0.95; }
+.instructions { max-width: 38rem; margin: 1.25rem 0 0; color: var(--muted); font: 1rem/1.6 Arial, sans-serif; }
+.workspace { display: grid; grid-template-columns: minmax(18rem, 32rem) minmax(12rem, 1fr); align-items: center; gap: clamp(2rem, 8vw, 7rem); margin-top: clamp(2rem, 6vw, 5rem); }
+.hexagon { position: relative; width: min(80vw, 32rem); aspect-ratio: 2 / 1.732; margin: auto; background: var(--line); clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); }
+/* The six wedges share the center and rotate clockwise around it. */
+.triangle { position: absolute; inset: 1px; z-index: 1; display: grid; place-items: center; padding: 0; border: 0; color: var(--ink); background: var(--paper); cursor: pointer; font: inherit; clip-path: polygon(50% 50%, 25% 0, 75% 0); transform: rotate(var(--triangle-angle)); transform-origin: center; transition: background 160ms ease, color 160ms ease; }
+.triangle::before { position: absolute; inset: 0; content: ''; background: rgba(255, 255, 255, 0.24); clip-path: polygon(50% 50%, 25% 0, 75% 0); opacity: 0; }
+.triangle:hover, .triangle:focus-visible, .triangle.is-active { color: #fff; background: var(--accent); outline: none; }
+.triangle:hover::before, .triangle:focus-visible::before, .triangle.is-active::before { opacity: 1; }
+.triangle:nth-child(1) { --triangle-angle: 0deg; }
+.triangle:nth-child(2) { --triangle-angle: 60deg; }
+.triangle:nth-child(3) { --triangle-angle: 120deg; }
+.triangle:nth-child(4) { --triangle-angle: 180deg; }
+.triangle:nth-child(5) { --triangle-angle: 240deg; }
+.triangle:nth-child(6) { --triangle-angle: 300deg; }
+.triangle-number, .triangle-label { position: absolute; left: 50%; transform: translate(-50%, -50%) rotate(calc(var(--triangle-angle) * -1)); }
+.triangle-number { top: 28%; font-size: clamp(1.25rem, 4vw, 2rem); font-weight: bold; }
+.triangle-label { top: 40%; font: 0.68rem Arial, sans-serif; opacity: 0.55; }
+.triangle-editor { position: absolute; z-index: 5; top: 10%; left: 50%; width: clamp(3.5rem, 10vw, 5rem); padding: 0.35rem 0.2rem; border: 1px solid rgba(36, 49, 58, 0.7); border-radius: 0; color: var(--ink); background: rgba(128, 128, 128, 0.35); text-align: center; font: bold 1.1rem Georgia, serif; transform: translate(-50%, -50%) rotate(calc(var(--triangle-angle) * -1)); }
+.triangle-editor { appearance: textfield; }
+.triangle-editor::-webkit-inner-spin-button, .triangle-editor::-webkit-outer-spin-button { margin: 0; appearance: none; }
+.triangle-editor:focus { outline: 2px solid var(--ink); outline-offset: 2px; }
+.legend { align-self: stretch; display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; padding-left: 1.5rem; border-left: 1px solid var(--line); font: 0.9rem/1.4 Arial, sans-serif; }
+.legend div { display: flex; align-items: center; gap: 0.65rem; }
+.legend-mark { width: 0.85rem; height: 0.85rem; border: 1px solid var(--line); background: var(--paper); }
+.legend-mark--selected { border-color: var(--accent); background: var(--accent); }
+.status { min-height: 2.8em; margin: 1rem 0 0; color: var(--muted); font-size: 0.85rem; }
+
+@media (max-width: 700px) {
+  .workspace { grid-template-columns: 1fr; }
+  .hexagon { width: min(88vw, 28rem); }
+  .legend { border-top: 1px solid var(--line); border-left: 0; padding: 1.25rem 0 0; }
+}
