@@ -36,3 +36,12 @@ This is a draft system: accounts disappear when the server restarts. Add a datab
 ```bash
 python3 backend/app.py
 ```
+
+
+
+'''
+tldr: run
+source .venv/bin/activate
+and
+python3 -m uvicorn backend.main:app --reload
+'''
