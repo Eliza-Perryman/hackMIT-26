@@ -18,7 +18,7 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 class SignUpRequest(BaseModel):
     email: str
     password: str
-z
+
 
 def hash_password(password: str) -> str:
     salt = secrets.token_bytes(16)

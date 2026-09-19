@@ -4,18 +4,32 @@ This project contains a FastAPI backend and a lightweight static frontend. Pytho
 
 ## Install
 
-Use `python3` on this machine:
+Use a local virtual environment for this project:
+
+### Windows PowerShell
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+### macOS / Linux
 
 ```bash
 python3 -m venv .venv
+
 source .venv/bin/activate
+or
+.\.venv\Scripts\Activate.ps1
+
 python3 -m pip install -r requirements.txt
 ```
 
 ## Run the web app
 
 ```bash
-python3 -m uvicorn backend.main:app --reload
+python -m uvicorn backend.main:app --reload
 ```
 
 Open http://127.0.0.1:8000. Submit the form to call `POST /api/auth`.
@@ -34,14 +48,13 @@ This is a draft system: accounts disappear when the server restarts. Add a datab
 ## Run the original demo
 
 ```bash
-python3 backend/app.py
+python backend/app.py
 ```
 
 
 
 '''
-tldr: run
-source .venv/bin/activate
-and
-python3 -m uvicorn backend.main:app --reload
+Quick start on Windows PowerShell:
+.\.venv\Scripts\Activate.ps1
+python -m uvicorn backend.main:app --reload
 '''
