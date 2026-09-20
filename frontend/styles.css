@@ -18,6 +18,7 @@
 
 body[data-theme="paper"] { --page-start: #fffdf8; --page-mid: #fffaf0; --page-end: #f3eee4; --panel: rgba(255, 253, 248, .96); --ink: #292524; --muted: #78716c; --line: #d6d3d1; --paper: #fffbeb; --accent: #57534e; --accent-foreground: #fff; --accent-soft: #e7e5e4; --shadow: rgba(41, 37, 36, .1); --skeleton: #e7e5e4; --focus: #57534e; }
 body[data-theme="sky"] { --page-start: #f0f9ff; --page-mid: #e0f2fe; --page-end: #dbeafe; --panel: rgba(248, 252, 255, .96); --ink: #172554; --muted: #64748b; --line: #bfdbfe; --paper: #eff6ff; --accent: #2563eb; --accent-foreground: #fff; --accent-soft: #dbeafe; --shadow: rgba(30, 64, 175, .12); --skeleton: #bfdbfe; --focus: #2563eb; }
+body[data-theme="ink"] { --page-start: #f0f9ff; --page-mid: #e0f2fe; --page-end: #dbeafe; --panel: rgba(248, 252, 255, .96); --ink: #172554; --muted: #64748b; --line: #bfdbfe; --paper: #eff6ff; --accent: #2563eb; --accent-foreground: #fff; --accent-soft: #dbeafe; --shadow: rgba(30, 64, 175, .12); --skeleton: #bfdbfe; --focus: #2563eb; }
 body[data-theme="mint"] { --page-start: #f0fdf4; --page-mid: #dcfce7; --page-end: #d1fae5; --panel: rgba(248, 255, 250, .96); --ink: #14532d; --muted: #5f7667; --line: #bbf7d0; --paper: #f0fdf4; --accent: #16a34a; --accent-foreground: #fff; --accent-soft: #dcfce7; --shadow: rgba(20, 83, 45, .12); --skeleton: #bbf7d0; --focus: #16a34a; }
 body[data-theme="sand"] { --page-start: #fffbeb; --page-mid: #fef3c7; --page-end: #fde68a; --panel: rgba(255, 253, 242, .96); --ink: #422006; --muted: #806b4a; --line: #fcd34d; --paper: #fffbeb; --accent: #b45309; --accent-foreground: #fff; --accent-soft: #fef3c7; --shadow: rgba(120, 53, 15, .12); --skeleton: #fcd34d; --focus: #b45309; }
 body[data-theme="rose"] { --page-start: #fff1f2; --page-mid: #ffe4e6; --page-end: #fce7f3; --panel: rgba(255, 249, 250, .96); --ink: #4c0519; --muted: #8b6470; --line: #fecdd3; --paper: #fff1f2; --accent: #e11d48; --accent-foreground: #fff; --accent-soft: #ffe4e6; --shadow: rgba(136, 19, 55, .12); --skeleton: #fecdd3; --focus: #e11d48; }
@@ -302,6 +303,15 @@ input:focus-visible {
   background: var(--accent);
   color: #fff;
   outline: none;
+}
+
+body[data-theme="midnight"] .triangle:hover,
+body[data-theme="midnight"] .triangle:focus-visible,
+body[data-theme="midnight"] .triangle.is-active,
+body[data-theme="charcoal"] .triangle:hover,
+body[data-theme="charcoal"] .triangle:focus-visible,
+body[data-theme="charcoal"] .triangle.is-active {
+  color: #000;
 }
 
 .triangle-number,
