@@ -271,7 +271,7 @@ input:focus-visible {
 .theme-option.is-selected {
   border-color: var(--ink);
   color: var(--ink);
-  transform: translateY(-1px);
+  background: var(--accent-soft);
 }
 
 .theme-swatch {
@@ -315,7 +315,7 @@ input:focus-visible {
 .secondary-button,
 .mode-card {
   border: 1px solid rgba(36, 49, 58, 0.2);
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
 .primary-button,
@@ -331,8 +331,8 @@ input:focus-visible {
 .primary-button:hover,
 .secondary-button:hover,
 .mode-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0.65rem 1.4rem rgba(36, 49, 58, 0.12);
+  transform: none;
+  box-shadow: inset 0 0 0 999px rgba(0, 0, 0, 0.08);
 }
 
 .mode-panel {
