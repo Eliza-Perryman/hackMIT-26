@@ -7,6 +7,10 @@ const goalHexagon = document.querySelector('#goal-hexagon');
 const goalPanel = document.querySelector('#goal-panel');
 const gameLayout = document.querySelector('#game-layout');
 const imageRain = document.querySelector('#image-rain');
+const coralCornerTrigger = document.querySelector('#coral-corner-trigger');
+const oceanCornerTrigger = document.querySelector('#ocean-corner-trigger');
+const coralPeekImage = document.querySelector('#coral-peek-image');
+const oceanSprintImage = document.querySelector('#ocean-sprint-image');
 const status = document.querySelector('#status');
 const modeLabel = document.querySelector('#mode-label');
 const startButton = document.querySelector('#start-game-button');
@@ -31,13 +35,36 @@ let editingIndex = null;
 let currentMode = null;
 let stepCount = 0;
 let isSolved = false;
+let oceanEggPlayed = false;
+
+function isTheme(themeName) {
+  return document.body.dataset.theme === themeName;
+}
+
+function showCoralPeek() {
+  if (!isTheme('coral')) return;
+  coralPeekImage.classList.add('is-peeking');
+}
+
+function hideCoralPeek() {
+  coralPeekImage.classList.remove('is-peeking');
+}
+
+function playOceanSprint() {
+  if (!isTheme('ocean') || oceanEggPlayed) return;
+
+  oceanEggPlayed = true;
+  oceanSprintImage.classList.remove('is-sprinting');
+  void oceanSprintImage.offsetWidth;
+  oceanSprintImage.classList.add('is-sprinting');
+}
 
 function startImageRain() {
   imageRain.replaceChildren();
 
   for (let index = 0; index < 320; index += 1) { // Create 28 falling images for a dense celebration.
     const image = document.createElement('img');
-    image.src = '/static/hexa-plex.png'; // Use the Hexa-plex artwork for every falling piece.
+    image.src = '/static/hexaplex.png'; // Use the Hexaplex artwork for every falling piece.
     image.className = 'rain-image'; // Apply the shared position and fall animation styles.
     image.alt = ''; // Keep decorative celebration images out of the screen reader flow.
     image.style.left = `${Math.random() * 100}%`; // Spread each image across the full viewport width.
@@ -78,6 +105,7 @@ function setTheme(themeName) {
   if (!availableThemes.includes(themeName)) themeName = 'mono';
 
   document.body.dataset.theme = themeName;
+  hideCoralPeek();
   themeButtons.forEach((button) => {
     const isSelected = button.dataset.theme === themeName;
     button.classList.toggle('is-selected', isSelected);
@@ -85,6 +113,11 @@ function setTheme(themeName) {
   });
   window.localStorage.setItem('hexagon-theme', themeName);
 }
+
+coralCornerTrigger.addEventListener('mouseenter', showCoralPeek);
+coralPeekImage.addEventListener('mouseenter', showCoralPeek);
+coralPeekImage.addEventListener('mouseleave', hideCoralPeek);
+oceanCornerTrigger.addEventListener('mouseenter', playOceanSprint);
 
 function showScreen(screenName) {
   const screens = [startScreen, modeScreen, loadingScreen, gameScreen];

@@ -56,6 +56,78 @@ body {
   pointer-events: none;
 }
 
+.theme-easter-egg {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  pointer-events: none;
+}
+
+.coral-corner-trigger {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
+  pointer-events: auto;
+}
+
+.ocean-corner-trigger {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 7rem;
+  height: 7rem;
+  pointer-events: auto;
+}
+
+.coral-peek-image,
+.ocean-sprint-image {
+  position: absolute;
+  width: clamp(8rem, 14vw, 13rem);
+  height: auto;
+  pointer-events: auto;
+}
+
+.coral-peek-image {
+  top: 0.75rem;
+  right: 0;
+  opacity: 0;
+  transform: translate(100%, -80%) rotate(12deg);
+  transition: opacity 180ms ease, transform 420ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.coral-peek-image.is-peeking {
+  opacity: 1;
+  transform: translate(18%, 22%) rotate(12deg);
+}
+
+.ocean-sprint-image {
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+.ocean-sprint-image.is-sprinting {
+  animation: ocean-sprint 900ms cubic-bezier(.6, 0, 1, 1) forwards;
+}
+
+@keyframes ocean-sprint {
+  0% {
+    opacity: 1;
+    transform: translateX(-110%);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(150vw);
+  }
+}
+
 .rain-image {
   position: absolute;
   top: -4rem;
