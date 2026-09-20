@@ -14,6 +14,7 @@ app = FastAPI(title="Anonymous Leaderboard", version="0.1.0")
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 
+''' Useless thing that was never implemented, but I don't want to delete it because it might be useful later.
 class LeaderboardEntryRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=24)
     time: float = Field(..., gt=0)
@@ -91,7 +92,7 @@ def submit_leaderboard_entry(payload: LeaderboardEntryRequest) -> dict[str, obje
         "message": "Score added to leaderboard.",
         "entry": {"name": safe_name, "time": observed_time},
     }
-
+'''
 
 @app.get("/", include_in_schema=False)
 def serve_frontend() -> FileResponse:

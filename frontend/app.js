@@ -19,6 +19,9 @@ const homeFromGameButton = document.querySelector('#home-from-game-button');
 const playAgainButton = document.querySelector('#play-again-button');
 const newGameButton = document.querySelector('#new-game-button');
 const rotateButton = document.querySelector('#rotate-button');
+const rulesButton = document.querySelector('#rules-button');
+const rulesPanel = document.querySelector('#rules-panel');
+const closeRulesButton = document.querySelector('#close-rules-button');
 const modeButtons = document.querySelectorAll('.mode-card');
 const themeButtons = document.querySelectorAll('.theme-option');
 
@@ -120,10 +123,16 @@ coralPeekImage.addEventListener('mouseleave', hideCoralPeek);
 oceanCornerTrigger.addEventListener('mouseenter', playOceanSprint);
 
 function showScreen(screenName) {
+  toggleRules(false);
   const screens = [startScreen, modeScreen, loadingScreen, gameScreen];
   screens.forEach((screen) => {
     screen.classList.toggle('hidden', screen.id !== `${screenName}-screen`);
   });
+}
+
+function toggleRules(isOpen) {
+  rulesPanel.classList.toggle('is-open', isOpen);
+  rulesPanel.setAttribute('aria-hidden', String(!isOpen));
 }
 
 function randomInt(min, max) {
@@ -347,6 +356,8 @@ function chooseMode(mode) {
 startButton.addEventListener('click', () => showScreen('mode'));
 homeFromModeButton.addEventListener('click', () => showScreen('start'));
 homeFromGameButton.addEventListener('click', () => showScreen('start'));
+rulesButton.addEventListener('click', () => toggleRules(!rulesPanel.classList.contains('is-open')));
+closeRulesButton.addEventListener('click', () => toggleRules(false));
 playAgainButton.addEventListener('click', () => beginGame(currentMode));
 newGameButton.addEventListener('click', () => showScreen('mode'));
 rotateButton.addEventListener('click', () => {

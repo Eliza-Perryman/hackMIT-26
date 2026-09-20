@@ -110,6 +110,9 @@
               <h2 id="mode-label">Easy</h2>
             </div>
             <div class="header-actions">
+              <button id="rules-button" class="icon-button" type="button" aria-label="Open game rules" title="Rules">
+                <i data-lucide="circle-help"></i>
+              </button>
               <button id="home-from-game-button" class="secondary-button" type="button">Home</button>
               <button id="new-game-button" class="secondary-button" type="button">Modes</button>
               <button id="play-again-button" class="primary-button" type="button">Play Again</button>
@@ -136,6 +139,22 @@
         </div>
       </section>
     </main>
+
+    <aside id="rules-panel" class="rules-panel" aria-labelledby="rules-title" aria-hidden="true">
+      <div class="rules-header">
+        <div>
+          <p class="eyebrow">How to play</p>
+          <h2 id="rules-title">Rules</h2>
+        </div>
+        <button id="close-rules-button" class="icon-button" type="button" aria-label="Close rules" title="Close rules">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <ol class="rules-list">
+        <li>Click a triangle to enter a number from -6 to 6.</li>
+
+      </ol>
+    </aside>
 
     <script src="/static/app.js" defer></script>
   </body>
