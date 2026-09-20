@@ -71,7 +71,7 @@ function startImageRain() {
     image.src = '/static/hexa-plex.png'; // Use the Hexaplex artwork for every falling piece.
     image.className = 'rain-image'; // Apply the shared position and fall animation styles.
     image.alt = ''; // Keep decorative celebration images out of the screen reader flow.
-    //const isHail = isHailEvent && Math.random() < 0.35; // If selected, make about 35% of this event's images hail.
+    const isHail = isHailEvent && Math.random() < 1; // If selected, make about 100% of this event's images hail.
     image.classList.toggle('is-hail', isHail);
     image.style.left = `${Math.random() * 100}%`; // Spread each image across the full viewport width.
     image.style.setProperty('--fall-delay', `${isHail ? Math.random() * 0.35 : Math.random() * 2.25}s`); // Keep hail starts tightly grouped and stagger normal rain.

@@ -1,10 +1,12 @@
-# Frontend + Backend Template
+# Hexaplex
 
-This project contains a FastAPI backend and a lightweight static frontend. Python scripts now live under `backend/`.
+Hexaplex is a browser puzzle game built around a six-triangle hexagon. Change the
+values in the interactive hexagon until they match the target pattern, using as
+few steps as possible.
 
-## Install
+## Quick start
 
-Use a local virtual environment for this project:
+Create a virtual environment and install the backend dependencies:
 
 ### Windows PowerShell
 
@@ -18,43 +20,48 @@ python -m pip install -r requirements.txt
 
 ```bash
 python3 -m venv .venv
-
 source .venv/bin/activate
-or
-.\.venv\Scripts\Activate.ps1
-
 python3 -m pip install -r requirements.txt
 ```
 
-## Run the web app
+Start the local server from the repository root:
 
 ```bash
 python -m uvicorn backend.main:app --reload
 ```
 
-Open http://127.0.0.1:8000. Submit the form to call `POST /api/auth`.
+Then open http://127.0.0.1:8000 in a browser.
 
-## Walkthrough
+## How to play
 
-1. `backend/main.py` serves the frontend and defines the signup/login API.
-2. `frontend/index.html` contains the email and password form.
-3. `frontend/app.js` sends the form to the backend and displays the response.
-4. `backend/main.py` validates the email and password, hashes new passwords, and stores accounts in memory.
+1. Choose **Start Game**, then select a difficulty.
+2. Click a triangle and enter a number from `-6` to `6`.
+3. The entered value is added to that triangle. The two triangles on its left
+	rotate clockwise, and the two on its right rotate counterclockwise. The
+	opposite triangle does not move.
+4. Overlapping values are added together. Negative numbers rotate backwards.
+5. Match the goal hexagon. Every input and manual rotation counts as one step.
 
-The built-in debug login is `debug@test.com` with password `test`.
+Available modes:
 
-This is a draft system: accounts disappear when the server restarts. Add a database, sessions, email verification, and rate limiting before production use.
+- **Easy**: 2 active triangles
+- **Difficult**: 3-4 active triangles
+- **Impossible**: 5-6 active triangles
+- **Sandbox**: free play without a target
 
-## Run the original demo
+The game also includes a clockwise rotate button, an in-game rules panel, and
+20 light and dark visual themes. The selected theme is saved in browser storage.
 
-```bash
-python backend/app.py
+## Project structure
+
+```text
+backend/main.py       FastAPI app and static-file server
+frontend/index.html   Game markup and controls
+frontend/app.js       Puzzle generation and game logic
+frontend/styles.css   Layout, themes, and animations
+requirements.txt      Python dependencies
 ```
 
+The legacy Matplotlib prototype remains in `backend/app.py`
 
-
-'''
-Quick start on Windows PowerShell:
-.\.venv\Scripts\Activate.ps1
-python -m uvicorn backend.main:app --reload
-'''
+It is separate from the browser game and is not required for the normal startup.
