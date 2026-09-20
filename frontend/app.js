@@ -25,6 +25,21 @@ let triangleValues = [0, 0, 0, 0, 0, 0];
 let goalValues = [0, 0, 0, 0, 0, 0];
 let editingIndex = null;
 let currentMode = null;
+let stepCount = 0;
+let isSolved = false;
+
+function matchesGoal() {
+  return triangleValues.every((value, index) => value === goalValues[index]);
+}
+
+function updateSolvedState() {
+  if (!matchesGoal()) return false;
+
+  isSolved = true;
+  editingIndex = null;
+  status.textContent = `Solved in ${stepCount} step${stepCount === 1 ? '' : 's'}!`;
+  return true;
+}
 
 function setTheme(themeName) {
   const availableThemes = [
@@ -137,6 +152,8 @@ function renderGoalHexagon() {
 }
 
 function openTriangleEditor(index) {
+  if (isSolved) return;
+
   if (editingIndex !== null && editingIndex !== index) renderHexagon();
 
   editingIndex = index;
@@ -176,24 +193,24 @@ function openTriangleEditor(index) {
 
     input.setCustomValidity('');
     applyShift(index, value);
+    stepCount += 1;
     renderHexagon();
 
-    if (triangleValues.every((value, index) => value === goalValues[index])) {
-      status.textContent = 'You matched the goal hexagon!';
-      return;
-    }
+    if (updateSolvedState()) return;
 
     status.textContent = `Triangle ${index + 1} set to ${value}. Values were shifted around it.`;
   });
 }
 
 function cancelEditor() {
+  if (isSolved) return;
+
   renderHexagon();
   status.textContent = 'Edit cancelled.';
 }
 
 document.addEventListener('pointerdown', (event) => {
-  if (editingIndex === null || event.target.closest('.triangle')) return;
+  if (isSolved || editingIndex === null || event.target.closest('.triangle')) return;
   cancelEditor();
 });
 
@@ -240,6 +257,8 @@ function beginGame(mode) {
   currentMode = mode;
   triangleValues = current;
   goalValues = goal;
+  stepCount = 0;
+  isSolved = false;
   modeLabel.textContent = MODES[mode].label;
   renderGoalHexagon();
   renderHexagon();
@@ -258,13 +277,13 @@ homeFromGameButton.addEventListener('click', () => showScreen('start'));
 playAgainButton.addEventListener('click', () => beginGame(currentMode));
 newGameButton.addEventListener('click', () => showScreen('mode'));
 rotateButton.addEventListener('click', () => {
+  if (isSolved) return;
+
   rotateClockwise();
+  stepCount += 1;
   renderHexagon();
 
-  if (triangleValues.every((value, index) => value === goalValues[index])) {
-    status.textContent = 'You matched the goal hexagon!';
-    return;
-  }
+  if (updateSolvedState()) return;
 
   status.textContent = 'Hexagon rotated clockwise.';
 });
