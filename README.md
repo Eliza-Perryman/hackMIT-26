@@ -4,6 +4,13 @@ Hexaplex is a browser puzzle game built around a six-triangle hexagon. Change th
 values in the interactive hexagon until they match the target pattern, using as
 few steps as possible.
 
+## Architecture
+
+The backend is written in Python and uses FastAPI to serve and connect the
+frontend to the application. The frontend is built with JavaScript, CSS, and
+HTML. Most puzzle computation, including puzzle generation, triangle shifts,
+step counting, and win detection, runs directly in the JavaScript frontend.
+
 ## Quick start
 
 Create a virtual environment and install the backend dependencies:
