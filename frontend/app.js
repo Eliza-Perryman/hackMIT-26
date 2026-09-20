@@ -79,27 +79,30 @@ document.addEventListener('pointerdown', (event) => {
 });
 
 function applyShift(selectedIndex, enteredValue) {
-  const nextValues = [...triangleValues];
+  const nextValues = new Array(6).fill(0);
   const selectedValue = triangleValues[selectedIndex];
-  nextValues[selectedIndex] = 0;
-  const oppositeIndex = (selectedIndex + 3) % 6;
-  const leftIndices = [(selectedIndex + 5) % 6, (selectedIndex + 4) % 6];
-  const rightIndices = [(selectedIndex + 1) % 6, (selectedIndex + 2) % 6];
-  const turns = enteredValue % 2;
-  rotateAndAdd(nextValues, leftIndices, -turns);
-  rotateAndAdd(nextValues, rightIndices, turns);
-  nextValues[oppositeIndex] = triangleValues[oppositeIndex];
-  nextValues[selectedIndex] = selectedValue + enteredValue;
-  triangleValues = nextValues;
-}
+  const oppositeValue = triangleValues[(selectedIndex + 3) % 6];
 
-function rotateAndAdd(values, indices, direction) {
-  if (direction === 0) return;
-  const source = indices.map((index) => values[index]);
-  indices.forEach((index, position) => {
-    const sourcePosition = (position - direction + indices.length) % indices.length;
-    values[index] = source[sourcePosition] + values[index];
-  });
+  const leftNeighbors = [];
+  const rightNeighbors = [];
+
+  for (let i = 1; i <= 2; i++) {
+    leftNeighbors.push(triangleValues[((selectedIndex - i) % 6 + 6) % 6]);
+    rightNeighbors.push(triangleValues[(selectedIndex + i) % 6]);
+  }
+
+  nextValues[selectedIndex] = selectedValue + enteredValue;
+  nextValues[(selectedIndex + 3) % 6] = oppositeValue;
+
+  for (let i = 1; i <= 2; i++) {
+    const leftIdx = ((selectedIndex - i - enteredValue) % 6 + 6) % 6;
+    const rightIdx = ((selectedIndex + i + enteredValue) % 6 + 6) % 6;
+
+    nextValues[leftIdx] += leftNeighbors[i - 1];
+    nextValues[rightIdx] += rightNeighbors[i - 1];
+  }
+
+  triangleValues = nextValues;
 }
 
 renderHexagon();
