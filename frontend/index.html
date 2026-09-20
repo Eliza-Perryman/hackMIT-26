@@ -12,7 +12,7 @@
         <header class="intro">
           <p class="eyebrow">Number arrangement</p>
           <h1 id="page-title">Hexagon shift</h1>
-          <p class="instructions">Select a triangle, enter an integer from -100 to 100, and confirm. The selected triangle keeps your number while the two triangles on each side rotate around it. Values that meet are added.</p>
+          <p class="instructions">Select a triangle, enter an integer from -5 to 5, and confirm. The selected triangle keeps your number while the two triangles on each side rotate around it. Values that meet are added.</p>
         </header>
         <div class="workspace">
           <div class="hexagon" id="hexagon" aria-label="Interactive six-triangle hexagon"></div>
@@ -22,6 +22,32 @@
             <p id="status" class="status" role="status" aria-live="polite">Choose a triangle to begin.</p>
           </aside>
         </div>
+      </section>
+
+      <section class="leaderboard-panel" aria-labelledby="leaderboard-title">
+        <div class="leaderboard-header">
+          <h2 id="leaderboard-title">Leaderboard</h2>
+          <div class="leaderboard-tabs" role="tablist" aria-label="Leaderboard periods">
+            <button type="button" class="range-button is-active" data-range="daily">Daily</button>
+            <button type="button" class="range-button" data-range="weekly">Weekly</button>
+            <button type="button" class="range-button" data-range="monthly">Monthly</button>
+            <button type="button" class="range-button" data-range="all_time">All time</button>
+          </div>
+        </div>
+
+        <form id="leaderboard-form" class="leaderboard-form">
+          <label>
+            <span>Player name</span>
+            <input id="player-name" name="playerName" type="text" maxlength="24" placeholder="Anonymous player" required />
+          </label>
+          <label>
+            <span>Time (seconds)</span>
+            <input id="player-time" name="playerTime" type="number" min="0.01" step="0.01" placeholder="12.34" required />
+          </label>
+          <button type="submit">Save score</button>
+        </form>
+
+        <ol id="leaderboard-list" class="leaderboard-list"></ol>
       </section>
     </main>
     <script src="/static/app.js" defer></script>
