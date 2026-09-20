@@ -4,6 +4,8 @@ const loadingScreen = document.querySelector('#loading-screen');
 const gameScreen = document.querySelector('#game-screen');
 const hexagon = document.querySelector('#hexagon');
 const goalHexagon = document.querySelector('#goal-hexagon');
+const goalPanel = document.querySelector('#goal-panel');
+const gameLayout = document.querySelector('#game-layout');
 const status = document.querySelector('#status');
 const modeLabel = document.querySelector('#mode-label');
 const startButton = document.querySelector('#start-game-button');
@@ -19,6 +21,7 @@ const MODES = {
   easy: { label: 'Easy', activeCount: 2 },
   difficult: { label: 'Difficult', activeCount: 3 },
   impossible: { label: 'Impossible', activeCount: 5 },
+  sandbox: { label: 'Sandbox', activeCount: 6 },
 };
 
 let triangleValues = [0, 0, 0, 0, 0, 0];
@@ -33,6 +36,8 @@ function matchesGoal() {
 }
 
 function updateSolvedState() {
+  if (currentMode === 'sandbox') return false;
+
   if (!matchesGoal()) return false;
 
   isSolved = true;
@@ -78,6 +83,13 @@ function shuffle(array) {
 }
 
 function generateModePuzzle(mode) {
+  if (mode === 'sandbox') {
+    return {
+      current: Array.from({ length: 6 }, () => randomInt(1, 6)),
+      goal: Array(6).fill(0),
+    };
+  }
+
   const config = MODES[mode];
   const activeCount = config.activeCount + (mode === 'difficult' && Math.random() < 0.5 ? 1 : 0) + (mode === 'impossible' && Math.random() < 0.5 ? 1 : 0);
   const available = shuffle([0, 1, 2, 3, 4, 5]).slice(0, activeCount);
@@ -260,9 +272,12 @@ function beginGame(mode) {
   stepCount = 0;
   isSolved = false;
   modeLabel.textContent = MODES[mode].label;
+  const isSandbox = mode === 'sandbox';
+  goalPanel.classList.toggle('hidden', isSandbox);
+  gameLayout.classList.toggle('sandbox-layout', isSandbox);
   renderGoalHexagon();
   renderHexagon();
-  status.textContent = 'Match the goal hexagon.';
+  status.textContent = isSandbox ? 'Sandbox mode — experiment freely.' : 'Match the goal hexagon.';
   showScreen('game');
 }
 
