@@ -48,6 +48,35 @@ body {
   font-family: Georgia, "Times New Roman", serif;
 }
 
+.image-rain {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rain-image {
+  position: absolute;
+  top: -4rem;
+  width: clamp(6rem, 8vw, 20rem);
+  height: auto;
+  opacity: 0;
+  animation: image-fall var(--fall-duration) var(--fall-delay) ease-in forwards;
+}
+
+@keyframes image-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-5vh) rotate(0deg);
+  }
+  12% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translateY(115vh) rotate(var(--fall-rotation));
+  }
+}
+
 button, input {
   font: inherit;
 }

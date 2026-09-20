@@ -6,6 +6,7 @@ const hexagon = document.querySelector('#hexagon');
 const goalHexagon = document.querySelector('#goal-hexagon');
 const goalPanel = document.querySelector('#goal-panel');
 const gameLayout = document.querySelector('#game-layout');
+const imageRain = document.querySelector('#image-rain');
 const status = document.querySelector('#status');
 const modeLabel = document.querySelector('#mode-label');
 const startButton = document.querySelector('#start-game-button');
@@ -31,6 +32,28 @@ let currentMode = null;
 let stepCount = 0;
 let isSolved = false;
 
+function startImageRain() {
+  imageRain.replaceChildren();
+
+  for (let index = 0; index < 320; index += 1) { // Create 28 falling images for a dense celebration.
+    const image = document.createElement('img');
+    image.src = '/static/hexa-plex.png'; // Use the Hexa-plex artwork for every falling piece.
+    image.className = 'rain-image'; // Apply the shared position and fall animation styles.
+    image.alt = ''; // Keep decorative celebration images out of the screen reader flow.
+    image.style.left = `${Math.random() * 100}%`; // Spread each image across the full viewport width.
+    image.style.setProperty('--fall-delay', `${Math.random() * 2.25}s`); // Stagger starts by up to 2 seconds.
+    image.style.setProperty('--fall-duration', `${2.6 + Math.random() * 0.1}s`); // Make each fall last 2.6-3.4 seconds.
+    image.style.setProperty('--fall-rotation', `${-360 + Math.random() * 720}deg`); // Give each image a random -360 to 360 degree spin.
+    imageRain.append(image);
+  }
+
+  window.setTimeout(() => imageRain.replaceChildren(), 15000); // Remove finished images after the celebration window.
+}
+
+function clearImageRain() {
+  imageRain.replaceChildren();
+}
+
 function matchesGoal() {
   return triangleValues.every((value, index) => value === goalValues[index]);
 }
@@ -43,6 +66,7 @@ function updateSolvedState() {
   isSolved = true;
   editingIndex = null;
   status.textContent = `Solved in ${stepCount} step${stepCount === 1 ? '' : 's'}!`;
+  startImageRain();
   return true;
 }
 
@@ -271,6 +295,7 @@ function beginGame(mode) {
   goalValues = goal;
   stepCount = 0;
   isSolved = false;
+  clearImageRain();
   modeLabel.textContent = MODES[mode].label;
   const isSandbox = mode === 'sandbox';
   goalPanel.classList.toggle('hidden', isSandbox);
