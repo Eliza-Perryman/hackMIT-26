@@ -10,6 +10,7 @@ const startButton = document.querySelector('#start-game-button');
 const newGameButton = document.querySelector('#new-game-button');
 const rotateButton = document.querySelector('#rotate-button');
 const modeButtons = document.querySelectorAll('.mode-card');
+const themeButtons = document.querySelectorAll('.theme-option');
 
 const MODES = {
   easy: { label: 'Easy', activeCount: 2 },
@@ -21,6 +22,22 @@ let triangleValues = [0, 0, 0, 0, 0, 0];
 let goalValues = [0, 0, 0, 0, 0, 0];
 let editingIndex = null;
 let currentMode = null;
+
+function setTheme(themeName) {
+  const availableThemes = [
+    'mono', 'paper', 'ink', 'sky', 'mint', 'sand', 'rose', 'lemon', 'ocean', 'coral', 'sage',
+    'midnight', 'graphite', 'forest', 'ember', 'cobalt', 'navy', 'charcoal', 'moss', 'ruby', 'slate',
+  ];
+  if (!availableThemes.includes(themeName)) themeName = 'mono';
+
+  document.body.dataset.theme = themeName;
+  themeButtons.forEach((button) => {
+    const isSelected = button.dataset.theme === themeName;
+    button.classList.toggle('is-selected', isSelected);
+    button.setAttribute('aria-pressed', String(isSelected));
+  });
+  window.localStorage.setItem('hexagon-theme', themeName);
+}
 
 function showScreen(screenName) {
   const screens = [startScreen, modeScreen, loadingScreen, gameScreen];
@@ -254,4 +271,9 @@ modeButtons.forEach((button) => {
   button.addEventListener('click', () => chooseMode(button.dataset.mode));
 });
 
+themeButtons.forEach((button) => {
+  button.addEventListener('click', () => setTheme(button.dataset.theme));
+});
+
+setTheme(window.localStorage.getItem('hexagon-theme') || 'meadow');
 showScreen('start');
