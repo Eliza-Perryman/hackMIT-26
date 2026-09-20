@@ -1,54 +1,139 @@
+const startScreen = document.querySelector('#start-screen');
+const modeScreen = document.querySelector('#mode-screen');
+const loadingScreen = document.querySelector('#loading-screen');
+const gameScreen = document.querySelector('#game-screen');
 const hexagon = document.querySelector('#hexagon');
+const goalHexagon = document.querySelector('#goal-hexagon');
 const status = document.querySelector('#status');
-const leaderboardList = document.querySelector('#leaderboard-list');
-const leaderboardForm = document.querySelector('#leaderboard-form');
-const playerNameInput = document.querySelector('#player-name');
-const playerTimeInput = document.querySelector('#player-time');
-const rangeButtons = document.querySelectorAll('.range-button');
+const modeLabel = document.querySelector('#mode-label');
+const startButton = document.querySelector('#start-game-button');
+const newGameButton = document.querySelector('#new-game-button');
+const rotateButton = document.querySelector('#rotate-button');
+const modeButtons = document.querySelectorAll('.mode-card');
 
-// Triangle positions are clockwise: 1 top, 2 upper-right, 3 lower-right,
-// 4 bottom, 5 lower-left, and 6 upper-left.
-// Dataset-backed starting configuration follows that same order.
-let triangleValues = [0, 1, 0, 2, 0, 0];
+const MODES = {
+  easy: { label: 'Easy', activeCount: 2 },
+  difficult: { label: 'Difficult', activeCount: 3 },
+  impossible: { label: 'Impossible', activeCount: 5 },
+};
+
+let triangleValues = [0, 0, 0, 0, 0, 0];
+let goalValues = [0, 0, 0, 0, 0, 0];
 let editingIndex = null;
-let activeLeaderboardRange = 'daily';
+let currentMode = null;
+
+function showScreen(screenName) {
+  const screens = [startScreen, modeScreen, loadingScreen, gameScreen];
+  screens.forEach((screen) => {
+    screen.classList.toggle('hidden', screen.id !== `${screenName}-screen`);
+  });
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffle(array) {
+  const clone = [...array];
+  for (let i = clone.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [clone[i], clone[j]] = [clone[j], clone[i]];
+  }
+  return clone;
+}
+
+function generateModePuzzle(mode) {
+  const config = MODES[mode];
+  const activeCount = config.activeCount + (mode === 'difficult' && Math.random() < 0.5 ? 1 : 0) + (mode === 'impossible' && Math.random() < 0.5 ? 1 : 0);
+  const available = shuffle([0, 1, 2, 3, 4, 5]).slice(0, activeCount);
+  const nextGoal = Array(6).fill(0);
+  const nextCurrent = Array(6).fill(0);
+
+  available.forEach((index) => {
+    const value = randomInt(1, 6);
+    nextGoal[index] = value;
+    nextCurrent[index] = value;
+  });
+
+  const mutateCount = Math.min(2, activeCount);
+  const mutationIndices = shuffle(available).slice(0, mutateCount);
+  mutationIndices.forEach((index, offset) => {
+    nextCurrent[index] = randomInt(1, 6);
+    if (offset === 0 && nextCurrent.every((value) => value === 0)) {
+      nextCurrent[index] = 1;
+    }
+  });
+
+  if (nextCurrent.every((value, index) => value === nextGoal[index])) {
+    const fallbackIndex = available[0] ?? 0;
+    nextCurrent[fallbackIndex] = (nextCurrent[fallbackIndex] % 6) + 1;
+  }
+
+  return { current: nextCurrent, goal: nextGoal };
+}
+
+function renderTriangularValues(values, targetElement, interactive = false) {
+  targetElement.replaceChildren();
+
+  values.forEach((value, index) => {
+    const triangle = document.createElement('div');
+    triangle.className = 'triangle';
+    triangle.style.setProperty('--triangle-angle', `${index * 60}deg`);
+    triangle.setAttribute('role', interactive ? 'button' : 'presentation');
+    triangle.tabIndex = interactive ? 0 : -1;
+    triangle.setAttribute('aria-label', interactive ? `Triangle ${index + 1}, value ${value}. Click to edit.` : `Triangle ${index + 1}, value ${value}.`);
+
+    const number = document.createElement('span');
+    number.className = 'triangle-number';
+    number.textContent = value === 0 ? '' : value;
+
+    const label = document.createElement('span');
+    label.className = 'triangle-label';
+    label.textContent = String(index + 1);
+
+    triangle.append(number, label);
+
+    if (interactive) {
+      triangle.addEventListener('click', () => openTriangleEditor(index));
+      triangle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openTriangleEditor(index);
+        }
+      });
+    }
+
+    targetElement.append(triangle);
+  });
+}
 
 function renderHexagon() {
   editingIndex = null;
-  hexagon.replaceChildren();
-  triangleValues.forEach((value, index) => {
-    const triangle = document.createElement('div');
-    triangle.className = 'triangle';
-    triangle.setAttribute('role', 'button');
-    triangle.tabIndex = 0;
-    triangle.setAttribute('aria-label', `Triangle ${index + 1}, value ${value}. Click to edit.`);
-    triangle.innerHTML = `<span class="triangle-number">${value}</span><span class="triangle-label">${index + 1}</span>`;
-    triangle.addEventListener('click', () => openTriangleEditor(index));
-    triangle.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openTriangleEditor(index);
-      }
-    });
-    hexagon.append(triangle);
-  });
+  renderTriangularValues(triangleValues, hexagon, true);
+}
+
+function renderGoalHexagon() {
+  renderTriangularValues(goalValues, goalHexagon, false);
 }
 
 function openTriangleEditor(index) {
   if (editingIndex !== null && editingIndex !== index) renderHexagon();
+
   editingIndex = index;
   document.querySelectorAll('.triangle').forEach((triangle, triangleIndex) => {
     triangle.classList.toggle('is-active', triangleIndex === index);
   });
+
   const triangle = hexagon.children[index];
   const input = document.createElement('input');
   input.className = 'triangle-editor';
   input.type = 'number';
-  input.min = '-5';
-  input.max = '5';
+  input.min = '-6';
+  input.max = '6';
   input.step = '1';
   input.value = triangleValues[index];
   input.setAttribute('aria-label', `New number for triangle ${index + 1}`);
+
   triangle.append(input);
   input.focus();
   input.select();
@@ -60,16 +145,24 @@ function openTriangleEditor(index) {
       return;
     }
     if (event.key !== 'Enter') return;
+
     const value = Number(input.value);
     if (!Number.isInteger(value) || value < Number(input.min) || value > Number(input.max)) {
-      input.setCustomValidity('Enter an integer from ' + input.min + ' to ' + input.max + '.');
+      input.setCustomValidity('Enter an integer from ' + input.min + ' to ' + input.max +".");
       input.reportValidity();
       input.focus();
       return;
     }
+
     input.setCustomValidity('');
     applyShift(index, value);
     renderHexagon();
+
+    if (triangleValues.every((value, index) => value === goalValues[index])) {
+      status.textContent = 'You matched the goal hexagon!';
+      return;
+    }
+
     status.textContent = `Triangle ${index + 1} set to ${value}. Values were shifted around it.`;
   });
 }
@@ -111,78 +204,54 @@ function applyShift(selectedIndex, enteredValue) {
   triangleValues = nextValues;
 }
 
-function formatTime(seconds) {
-  return `${Number(seconds).toFixed(2)}s`;
+
+function rotateClockwise(){
+  const newValues = triangleValues.slice();
+  for (let i = 0; i < 6; i++) {
+    newValues[(i + 1) % 6] = triangleValues[i];
+  }
+  triangleValues = newValues;
 }
 
-function renderLeaderboard(entries) {
-  if (!leaderboardList) return;
 
-  if (!entries || entries.length === 0) {
-    leaderboardList.innerHTML = '<li>No scores yet for this range.</li>';
+
+function beginGame(mode) {
+  const { current, goal } = generateModePuzzle(mode);
+  currentMode = mode;
+  triangleValues = current;
+  goalValues = goal;
+  modeLabel.textContent = MODES[mode].label;
+  renderGoalHexagon();
+  renderHexagon();
+  status.textContent = 'Match the goal hexagon.';
+  showScreen('game');
+}
+
+function chooseMode(mode) {
+  showScreen('loading');
+  window.setTimeout(() => beginGame(mode), 650);
+}
+
+startButton.addEventListener('click', () => showScreen('mode'));
+newGameButton.addEventListener('click', () => showScreen('mode'));
+rotateButton.addEventListener('click', () => {
+  rotateClockwise();
+  renderHexagon();
+
+  if (triangleValues.every((value, index) => value === goalValues[index])) {
+    status.textContent = 'You matched the goal hexagon!';
     return;
   }
 
-  leaderboardList.innerHTML = entries
-    .map((entry, index) => `<li><span>#${index + 1}</span><strong>${entry.name}</strong><em>${formatTime(entry.time)}</em></li>`)
-    .join('');
-}
-
-async function loadLeaderboard(range = activeLeaderboardRange) {
-  activeLeaderboardRange = range;
-  rangeButtons.forEach((button) => {
-    button.classList.toggle('is-active', button.dataset.range === range);
-  });
-
-  try {
-    const response = await fetch(`/api/leaderboard?range=${encodeURIComponent(range)}`);
-    if (!response.ok) throw new Error('Unable to load leaderboard.');
-    const payload = await response.json();
-    renderLeaderboard(payload.entries);
-  } catch (error) {
-    renderLeaderboard([]);
-    if (status) status.textContent = error.message;
-  }
-}
-
-leaderboardForm?.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const name = playerNameInput.value.trim();
-  const time = Number(playerTimeInput.value);
-
-  if (!name) {
-    playerNameInput.focus();
-    return;
-  }
-
-  if (!Number.isFinite(time) || time <= 0) {
-    playerTimeInput.focus();
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/leaderboard', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, time }),
-    });
-
-    if (!response.ok) {
-      const payload = await response.json().catch(() => ({}));
-      throw new Error(payload.detail || 'Unable to save score.');
-    }
-
-    leaderboardForm.reset();
-    await loadLeaderboard(activeLeaderboardRange);
-    status.textContent = `Saved ${name} to the ${activeLeaderboardRange} leaderboard.`;
-  } catch (error) {
-    status.textContent = error.message;
-  }
+  status.textContent = 'Hexagon rotated clockwise.';
 });
 
-rangeButtons.forEach((button) => {
-  button.addEventListener('click', () => loadLeaderboard(button.dataset.range));
+if (window.lucide) {
+  lucide.createIcons();
+}
+
+modeButtons.forEach((button) => {
+  button.addEventListener('click', () => chooseMode(button.dataset.mode));
 });
 
-renderHexagon();
-loadLeaderboard('daily');
+showScreen('start');
