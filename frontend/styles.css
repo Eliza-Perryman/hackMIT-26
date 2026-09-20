@@ -102,12 +102,20 @@ input:focus-visible {
   font-size: clamp(2.4rem, 6vw, 5rem);
 }
 
+.empty-state > .eyebrow {
+  font-size: 1.25rem;
+}
+
+.empty-state > .primary-button {
+  margin-top: 1.5rem;
+}
+
 .theme-picker {
   display: grid;
   width: min(100%, 68rem);
   gap: 0.65rem;
   justify-items: center;
-  margin-top: 0.5rem;
+  margin-top: 2.5rem;
 }
 
 .theme-label {

@@ -28,7 +28,7 @@ let currentMode = null;
 
 function setTheme(themeName) {
   const availableThemes = [
-    'mono', 'paper', 'ink', 'sky', 'mint', 'sand', 'rose', 'lemon', 'ocean', 'coral', 'sage',
+    'mono', 'paper', 'sky', 'mint', 'sand', 'rose', 'lemon', 'ocean', 'coral', 'sage',
     'midnight', 'graphite', 'forest', 'ember', 'cobalt', 'navy', 'charcoal', 'moss', 'ruby', 'slate',
   ];
   if (!availableThemes.includes(themeName)) themeName = 'mono';
