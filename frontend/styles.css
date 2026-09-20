@@ -230,6 +230,19 @@ input:focus-visible {
   gap: 1.5rem;
 }
 
+.screen-header,
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.header-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
 .mode-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -451,5 +464,15 @@ input:focus-visible {
   .game-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .screen-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
   }
 }

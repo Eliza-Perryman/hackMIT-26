@@ -7,6 +7,9 @@ const goalHexagon = document.querySelector('#goal-hexagon');
 const status = document.querySelector('#status');
 const modeLabel = document.querySelector('#mode-label');
 const startButton = document.querySelector('#start-game-button');
+const homeFromModeButton = document.querySelector('#home-from-mode-button');
+const homeFromGameButton = document.querySelector('#home-from-game-button');
+const playAgainButton = document.querySelector('#play-again-button');
 const newGameButton = document.querySelector('#new-game-button');
 const rotateButton = document.querySelector('#rotate-button');
 const modeButtons = document.querySelectorAll('.mode-card');
@@ -250,6 +253,9 @@ function chooseMode(mode) {
 }
 
 startButton.addEventListener('click', () => showScreen('mode'));
+homeFromModeButton.addEventListener('click', () => showScreen('start'));
+homeFromGameButton.addEventListener('click', () => showScreen('start'));
+playAgainButton.addEventListener('click', () => beginGame(currentMode));
 newGameButton.addEventListener('click', () => showScreen('mode'));
 rotateButton.addEventListener('click', () => {
   rotateClockwise();

@@ -55,8 +55,13 @@
 
       <section id="mode-screen" class="screen hidden">
         <div class="panel mode-panel">
-          <p class="eyebrow">Difficulty</p>
-          <h2>Choose a mode</h2>
+          <div class="screen-header">
+            <div>
+              <p class="eyebrow">Difficulty</p>
+              <h2>Choose a mode</h2>
+            </div>
+            <button id="home-from-mode-button" class="secondary-button" type="button">Home</button>
+          </div>
           <div class="mode-grid" aria-label="Game modes">
             <button type="button" class="mode-card" data-mode="easy">
               <span class="mode-title">Easy</span>
@@ -96,7 +101,11 @@
               <p class="eyebrow">Target pattern</p>
               <h2 id="mode-label">Easy</h2>
             </div>
-            <button id="new-game-button" class="secondary-button" type="button">New Game</button>
+            <div class="header-actions">
+              <button id="home-from-game-button" class="secondary-button" type="button">Home</button>
+              <button id="new-game-button" class="secondary-button" type="button">Modes</button>
+              <button id="play-again-button" class="primary-button" type="button">Play Again</button>
+            </div>
           </div>
 
           <div class="game-layout">
