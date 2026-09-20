@@ -67,7 +67,7 @@ function startImageRain() {
 
   for (let index = 0; index < 320; index += 1) { // Create 28 falling images for a dense celebration.
     const image = document.createElement('img');
-    image.src = '/static/hexaplex.png'; // Use the Hexaplex artwork for every falling piece.
+    image.src = '/static/hexa-plex.png'; // Use the Hexaplex artwork for every falling piece.
     image.className = 'rain-image'; // Apply the shared position and fall animation styles.
     image.alt = ''; // Keep decorative celebration images out of the screen reader flow.
     image.style.left = `${Math.random() * 100}%`; // Spread each image across the full viewport width.
