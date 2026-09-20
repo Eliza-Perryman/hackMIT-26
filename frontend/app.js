@@ -38,8 +38,8 @@ function openTriangleEditor(index) {
   const input = document.createElement('input');
   input.className = 'triangle-editor';
   input.type = 'number';
-  input.min = '-100';
-  input.max = '100';
+  input.min = '-5';
+  input.max = '5';
   input.step = '1';
   input.value = triangleValues[index];
   input.setAttribute('aria-label', `New number for triangle ${index + 1}`);
@@ -55,8 +55,8 @@ function openTriangleEditor(index) {
     }
     if (event.key !== 'Enter') return;
     const value = Number(input.value);
-    if (!Number.isInteger(value) || value < -100 || value > 100) {
-      input.setCustomValidity('Enter a whole number from -100 to 100.');
+    if (!Number.isInteger(value) || value < input.min || value > input.max) {
+      input.setCustomValidity('Enter an integer from ' + input.min + ' to ' + input.max + '.');
       input.reportValidity();
       input.focus();
       return;
