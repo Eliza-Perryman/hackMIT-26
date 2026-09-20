@@ -64,15 +64,18 @@ function playOceanSprint() {
 
 function startImageRain() {
   imageRain.replaceChildren();
+  const isHailEvent = Math.random() < 0.1; // Only 10% of celebrations can include a hail burst.
 
   for (let index = 0; index < 320; index += 1) { // Create 28 falling images for a dense celebration.
     const image = document.createElement('img');
     image.src = '/static/hexa-plex.png'; // Use the Hexaplex artwork for every falling piece.
     image.className = 'rain-image'; // Apply the shared position and fall animation styles.
     image.alt = ''; // Keep decorative celebration images out of the screen reader flow.
+    //const isHail = isHailEvent && Math.random() < 0.35; // If selected, make about 35% of this event's images hail.
+    image.classList.toggle('is-hail', isHail);
     image.style.left = `${Math.random() * 100}%`; // Spread each image across the full viewport width.
-    image.style.setProperty('--fall-delay', `${Math.random() * 2.25}s`); // Stagger starts by up to 2 seconds.
-    image.style.setProperty('--fall-duration', `${2.6 + Math.random() * 0.1}s`); // Make each fall last 2.6-3.4 seconds.
+    image.style.setProperty('--fall-delay', `${isHail ? Math.random() * 0.35 : Math.random() * 2.25}s`); // Keep hail starts tightly grouped and stagger normal rain.
+    image.style.setProperty('--fall-duration', `${2.6 + Math.random() * 0.1}s`); // Keep normal rain falls around 2.6 seconds.
     image.style.setProperty('--fall-rotation', `${-360 + Math.random() * 720}deg`); // Give each image a random -360 to 360 degree spin.
     imageRain.append(image);
   }

@@ -137,12 +137,29 @@ body {
   animation: image-fall var(--fall-duration) var(--fall-delay) ease-in forwards;
 }
 
+.rain-image.is-hail {
+  --fall-duration: 0.55s;
+  animation-name: image-hail;
+  animation-timing-function: cubic-bezier(.7, 0, 1, 1);
+}
+
 @keyframes image-fall {
   0% {
     opacity: 0;
     transform: translateY(-5vh) rotate(0deg);
   }
   12% { opacity: 1; }
+  100% {
+    opacity: 1;
+    transform: translateY(115vh) rotate(var(--fall-rotation));
+  }
+}
+
+@keyframes image-hail {
+  0% {
+    opacity: 1;
+    transform: translateY(-12vh) rotate(0deg);
+  }
   100% {
     opacity: 1;
     transform: translateY(115vh) rotate(var(--fall-rotation));
